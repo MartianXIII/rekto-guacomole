@@ -8,3 +8,18 @@
 
   <button type="submit">Save Post</button>
 </form>
+
+
+@section('body')
+{{Form::open(['url'=>'posts','method'=>'post'])}}
+    {{Form::label('title', 'Title')}}<br>
+    {{Form::text('title')}}<br>
+    {{Form::label('body', 'Body')}}<br>
+    {{Form::textarea('body')}}<br>
+    {{Form::submit('Submit')}}
+{{Form::close()}}
+@stop
+
+<div class="form-group @if($errors->has('body'))has-error @nedit"
+
+  @parent 

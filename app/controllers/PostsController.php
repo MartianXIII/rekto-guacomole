@@ -10,7 +10,7 @@ class PostsController extends \BaseController {
 	public function index()
 	{
 		$posts = Post::all();
-		return View::make('posts.index')->with('posts', $posts);
+		return View::make('posts.index')->with(compact('posts', $posts));
 	}
 
 
@@ -32,6 +32,16 @@ class PostsController extends \BaseController {
 	 */
 	public function store()
 	{
+				$validator = Validator::make($data = Input::all(), Post::$rules);
+
+        if ($validator->fails())
+        {
+            return Redirect::back()->withErrors($validator)->withInput();
+        }
+
+        Post::create($data);
+
+        return Redirect::route('posts.index');
 		//return Redirect::back()->withInput()
 		if(!Input::has('title') && !Input::has('body')){
 			return Redirect::back()->withInput();
@@ -53,7 +63,9 @@ class PostsController extends \BaseController {
 	 */
 	public function show($id)
 	{
-		//
+		$post = Post::find(id);
+
+		return View::make('posts.show')->with('post', $posts);
 	}
 
 
