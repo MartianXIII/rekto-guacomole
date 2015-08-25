@@ -13,7 +13,22 @@
 
 Route::get('/', function()
 {
+	$user = new User;
+	$user->username = 'NewUser';
+	$user->password = Hash::make('password');
+	$user->save();
 	return View::make('hello');
+
+	User::create([
+		'username' => 'AnotherUser',
+		'password' => Hash::make('1234')
+		]);
+
+		$users = User::find(2);
+		$user->username = 'UpdatedName';
+		$user->save();
+
+		return User::orderBy('username', 'asc')->get();
 });
 
 Route::get('resume', function()
