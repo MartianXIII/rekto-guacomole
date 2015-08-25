@@ -2,7 +2,12 @@
 
 class Post extends Eloquent
 {
-  protectd $table = 'posts;'
+  protected $table = 'posts';
+
+  public static $rules = array(
+    'title' => 'required|max:64' ,
+    'body' => 'required|max:10000|min:350'
+  );
 }
 
  ?>
