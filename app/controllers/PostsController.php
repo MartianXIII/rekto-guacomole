@@ -7,12 +7,24 @@ class PostsController extends \BaseController {
 	 *
 	 * @return Response
 	 */
+
+	public function __construct()
+   {
+       parent::__construct();
+       //$this->beforeFilter('auth', array('except' => array('index', 'show')));
+   }
+
 	public function index()
 	{
+		$query = Post::with('user');
+
+		$query->where('title', "=", 'Cross-group neutral implementation');
+		$post = $query->orderBy('created_at')->paginate(5);
+
 		$posts = Post::all();
+		// dd($posts);
 		return View::make('posts.index')->with(compact('posts', $posts));
 	}
-
 
 	/**
 	 * Show the form for creating a new resource.
@@ -23,7 +35,6 @@ class PostsController extends \BaseController {
 	{
 		return View::make('posts.create');
 	}
-
 
 	/**
 	 * Store a newly created resource in storage.
@@ -47,11 +58,13 @@ class PostsController extends \BaseController {
 			return Redirect::back()->withInput();
 		}
 		$post = new Post();
-		$post->title = Input::ge('title');
+		$post->title = Input::get('title');
 		$post->body = Input::get('body');
+		$post->user_id = Auth::id();
+		//$post->user_id = Auth::user()->id;
 		$post->save();
 
-		rerturn Redirect::action('PostController@index');
+		 Redirect::action('PostController@index');
 	}
 
 
@@ -64,6 +77,17 @@ class PostsController extends \BaseController {
 	public function show($id)
 	{
 		$post = Post::find(id);
+
+		if(!$post) {
+			//$message =" We're sorry,  that Id cannot be located";
+
+			Session::flash('errorMessage', 'Post with id of $id is not located');
+
+			App::abort(404);
+
+
+			return Redirect::action('PostController@index');
+		}
 
 		return View::make('posts.show')->with('post', $posts);
 	}
@@ -89,7 +113,7 @@ class PostsController extends \BaseController {
 	 */
 	public function update($id)
 	{
-		//
+		$validator = Validator::make(Input::all());
 	}
 
 

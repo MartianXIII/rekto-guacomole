@@ -9,12 +9,21 @@ class PostsTableSeeder extends Seeder {
 	{
 		$faker = Faker::create();
 
-		foreach(range(1, 10) as $index)
+		for($i=1; $i<=23; $i++)
 		{
-			Post::create([
-
-			]);
+			$post = new Post();
+			$post->title = $faker->catchPhrase;
+			$post->body = $faker->realText;
+			$post->user_id = User::all()->random(1)->id;
+			$post->save();
 		}
+
+		// foreach(range(1, 10) as $index)
+		// {
+		// 	Post::create([
+		//
+		// 	]);
+		// }
 	}
 
 }
